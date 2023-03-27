@@ -10,5 +10,5 @@ odoorpc
 openpyxl
 openupgradelib
 pysftp
-sentry_sdk>=1.17.0
+sentry_sdk==1.16.0
 unidecode

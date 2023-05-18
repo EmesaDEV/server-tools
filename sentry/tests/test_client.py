@@ -60,6 +60,7 @@ class InMemoryTransport(HttpTransport):
     def capture_envelope(self, envelope):
         pass
 
+
 class TestClientSetup(TransactionCase):
     def setUp(self):
         super(TestClientSetup, self).setUp()

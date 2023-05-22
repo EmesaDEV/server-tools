@@ -57,6 +57,9 @@ class InMemoryTransport(HttpTransport):
     def kill(self, *args, **kwargs):
         pass
 
+    def capture_envelope(self, envelope):
+        pass
+
 
 class TestClientSetup(TransactionCase):
     def setUp(self):
@@ -117,15 +120,15 @@ class TestClientSetup(TransactionCase):
         self.assertEventNotCaptured(client, level, msg)
 
     def test_capture_exceptions_with_no_exc_info(self):
-        """Testing that QWebException which isn't in the default
+        """Testing that TestException which isn't in the default
         ignore_exceptions list is captured"""
         client = initialize_sentry(config)._client
         client.transport = InMemoryTransport({"dsn": self.dsn})
-        level, msg = logging.WARNING, "Test exception"
+        level, msg = logging.WARNING, "Test exception - cannot be muted"
         try:
-            raise exceptions.QWebException(msg)
-        except exceptions.QWebException as exception:
-            # Odoo handles UserErrors by logging the exception
+            raise TestException(msg)
+        except TestException as exception:
+            # Odoo handles UserErrors by logging the raw exception
             _logger.warning(exception)
         level = "warning"
         self.assertEventCaptured(client, level, msg)
@@ -136,11 +139,11 @@ class TestClientSetup(TransactionCase):
         ValidationError exception)"""
         client = initialize_sentry(config)._client
         client.transport = InMemoryTransport({"dsn": self.dsn})
-        level, msg = logging.WARNING, "Test exception"
+        level, msg = logging.WARNING, "Test exception - cannot be muted"
         try:
             raise exceptions.ValidationError(msg)
         except exceptions.ValidationError as exception:
-            # Odoo handles UserErrors by logging the exception
+            # Odoo handles UserErrors by logging the raw exception
             _logger.warning(exception)
         level = "warning"
         self.assertEventNotCaptured(client, level, msg)

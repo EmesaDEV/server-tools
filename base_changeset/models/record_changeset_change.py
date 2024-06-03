@@ -130,10 +130,9 @@ class RecordChangesetChange(models.Model):
 
     @api.model
     def _reference_models(self):
-        """
-        Get all model names from ir.model.
+        """Get all model names from ir.model.
 
-        Requires sudo, as ir.model is no longer read for all (since 16.0).
+        Requires sudo, as ir.model is only readable for ERP managers.
         """
         models = self.sudo().env["ir.model"].search([])
         return [(model.model, model.name) for model in models]
